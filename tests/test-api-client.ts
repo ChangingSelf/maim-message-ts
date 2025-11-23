@@ -23,7 +23,7 @@ async function main() {
     console.log('\n收到服务器回复:');
     console.log('  消息ID:', message.getMessageId());
     console.log('  内容:', message.messageSegment);
-    console.log('  时间:', new Date(message.getTime() * 1000).toISOString());
+    console.log('  时间:', new Date(message.getMessageTime() * 1000).toISOString());
   });
 
   // 启动客户端

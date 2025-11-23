@@ -4,7 +4,7 @@
  */
 
 import { Router, RouteConfig, TargetConfig } from '../src/router';
-import { MessageBase, Seg, UserInfo, GroupInfo } from '../src/message-base';
+import { MessageBase, Seg, UserInfo, GroupInfo, BaseMessageInfo } from '../src/message-base';
 
 async function main() {
   console.log('启动测试路由器...');
@@ -33,13 +33,13 @@ async function main() {
     for (const targetPlatform of otherPlatforms) {
       try {
         const forwardMessage = new MessageBase(
-          {
-            platform: targetPlatform,
-            messageId: `fwd_${message.messageInfo.messageId}`,
-            time: Date.now() / 1000,
-            groupInfo: new GroupInfo(targetPlatform, 'group_forward'),
-            userInfo: new UserInfo(targetPlatform, 'router'),
-          },
+          new BaseMessageInfo(
+            targetPlatform,
+            `fwd_${message.messageInfo.messageId}`,
+            Date.now() / 1000,
+            new GroupInfo(targetPlatform, 'group_forward'),
+            new UserInfo(targetPlatform, 'router'),
+          ),
           new Seg('text', `[转发自 ${currentPlatform}] ${JSON.stringify(message.messageSegment)}`),
         );
 

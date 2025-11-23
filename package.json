@@ -29,7 +29,12 @@
     "chat",
     "bot"
   ],
-  "author": "tcmofashi",
+  "author": "ChangingSelf",
+  "contributors": [
+    "tcmofashi <mofashiforzbx@qq.com> (https://github.com/tcmofashi)",
+    "Maple127667 (https://github.com/Maple127667)",
+    "zzzzzyc (https://github.com/zzzzzyc)"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",

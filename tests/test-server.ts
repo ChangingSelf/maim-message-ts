@@ -4,7 +4,7 @@
  */
 
 import { MessageServer } from '../src/api';
-import { MessageBase, Seg } from '../src/message-base';
+import { MessageBase, Seg, BaseMessageInfo } from '../src/message-base';
 
 async function main() {
   console.log('启动测试服务器...');
@@ -19,23 +19,23 @@ async function main() {
       console.log('  平台:', message.messageInfo.platform);
       console.log('  消息ID:', message.messageInfo.messageId);
       console.log('  内容:', message.messageSegment);
-      console.log('  时间:', new Date(message.messageInfo.time * 1000).toISOString());
+      console.log('  时间:', message.messageInfo.time ? new Date(message.messageInfo.time * 1000).toISOString() : 'unknown');
 
       // 回复消息
       const reply = new MessageBase(
-        {
-          platform: message.messageInfo.platform,
-          messageId: 'reply_' + message.messageInfo.messageId,
-          time: Date.now() / 1000,
-          groupInfo: message.messageInfo.groupInfo,
-          userInfo: message.messageInfo.userInfo,
-        },
+        new BaseMessageInfo(
+          message.messageInfo.platform,
+          'reply_' + message.messageInfo.messageId,
+          Date.now() / 1000,
+          message.messageInfo.groupInfo,
+          message.messageInfo.userInfo,
+        ),
         new Seg('text', `服务器收到了你的消息: ${JSON.stringify(message.messageSegment)}`),
       );
 
       // 发送回复
       setTimeout(async () => {
-        await server.sendMessage(message.messageInfo.platform || 'unknown', reply.toDict());
+        await server.sendMessage(reply);
         console.log('  已发送回复');
       }, 100);
     } catch (error) {
@@ -52,4 +52,3 @@ main().catch(error => {
   console.error('服务器运行出错:', error);
   process.exit(1);
 });
-

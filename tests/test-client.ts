@@ -4,7 +4,7 @@
  */
 
 import { MessageClient } from '../src/api';
-import { MessageBase, Seg, UserInfo, GroupInfo } from '../src/message-base';
+import { MessageBase, Seg, UserInfo, GroupInfo, BaseMessageInfo } from '../src/message-base';
 
 async function main() {
   console.log('启动测试客户端...');
@@ -39,13 +39,13 @@ async function main() {
   const sendMessage = async () => {
     count++;
     const message = new MessageBase(
-      {
+      new BaseMessageInfo(
         platform,
-        messageId: `msg_${platform}_${count}_${Date.now()}`,
-        time: Date.now() / 1000,
-        groupInfo: new GroupInfo(platform, 'group_test'),
-        userInfo: new UserInfo(platform, 'user_test'),
-      },
+        `msg_${platform}_${count}_${Date.now()}`,
+        Date.now() / 1000,
+        new GroupInfo(platform, 'group_test'),
+        new UserInfo(platform, 'user_test'),
+      ),
       new Seg('text', `来自 ${platform} 的测试消息 #${count}`),
     );
 
