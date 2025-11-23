@@ -46,6 +46,9 @@ async function main() {
         new MessageDim(apiKey, platform),
       );
 
+      // 打印发送的原始数据
+      console.log('  [发送原始数据]:', JSON.stringify(reply.toDict(), null, 2));
+
       const success = await server.sendMessage(reply);
       if (success) {
         stats.messagesSent++;

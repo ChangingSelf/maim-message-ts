@@ -1,6 +1,6 @@
 {
   "name": "@changingself/maim-message-ts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MaiBot 通用消息接口库 - TypeScript 实现",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

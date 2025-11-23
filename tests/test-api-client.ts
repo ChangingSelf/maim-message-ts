@@ -13,7 +13,7 @@ async function main() {
   const platform = process.argv[3] || 'test_platform_1';
 
   // 创建客户端配置
-  const config = createClientConfig('ws://localhost:18040/ws', apiKey, platform);
+  const config = createClientConfig('ws://localhost:8000/ws', apiKey, platform);
 
   // 创建客户端
   const client = new WebSocketClient(config);
@@ -48,6 +48,7 @@ async function main() {
     console.log('  API Key:', apiKey);
     console.log('  平台:', platform);
     console.log('  内容:', message.messageSegment);
+    console.log('  [发送原始数据]:', JSON.stringify(message.toDict(), null, 2));
 
     try {
       const success = await client.sendMessage(message);

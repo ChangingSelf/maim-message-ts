@@ -50,6 +50,9 @@ export class WebSocketClient {
    */
   private async handleIncomingMessage(messageData: any): Promise<void> {
     try {
+      // 调试：打印接收到的原始数据
+      console.log('[接收原始数据]:', JSON.stringify(messageData, null, 2));
+
       // 判断是否为自定义消息
       if (messageData.is_custom_message || messageData.message_type_name) {
         const messageTypeName = messageData.message_type_name;

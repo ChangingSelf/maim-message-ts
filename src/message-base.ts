@@ -83,11 +83,22 @@ export class GroupInfo {
    * 从字典创建GroupInfo实例
    */
   static fromDict(data: Record<string, any> | null | undefined): GroupInfo | null {
-    if (!data || data.group_id === null || data.group_id === undefined) {
+    if (!data) {
       return null;
     }
 
-    return new GroupInfo(data.platform, data.group_id, data.group_name);
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      normalizedData[snakeKey] = data[key];
+    }
+
+    if (normalizedData.group_id === null || normalizedData.group_id === undefined) {
+      return null;
+    }
+
+    return new GroupInfo(normalizedData.platform, normalizedData.group_id, normalizedData.group_name);
   }
 }
 
@@ -129,7 +140,14 @@ export class UserInfo {
       return null;
     }
 
-    return new UserInfo(data.platform, data.user_id, data.user_nickname, data.user_cardname);
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      normalizedData[snakeKey] = data[key];
+    }
+
+    return new UserInfo(normalizedData.platform, normalizedData.user_id, normalizedData.user_nickname, normalizedData.user_cardname);
   }
 }
 
@@ -165,8 +183,15 @@ export class InfoBase {
    * 从字典创建InfoBase实例
    */
   static fromDict(data: Record<string, any>): InfoBase {
-    const groupInfo = data.group_info ? GroupInfo.fromDict(data.group_info) : null;
-    const userInfo = data.user_info ? UserInfo.fromDict(data.user_info) : null;
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      normalizedData[snakeKey] = data[key];
+    }
+
+    const groupInfo = normalizedData.group_info ? GroupInfo.fromDict(normalizedData.group_info) : null;
+    const userInfo = normalizedData.user_info ? UserInfo.fromDict(normalizedData.user_info) : null;
 
     return new InfoBase(groupInfo, userInfo);
   }
@@ -213,7 +238,14 @@ export class FormatInfo {
    * 从字典创建FormatInfo实例
    */
   static fromDict(data: Record<string, any>): FormatInfo {
-    return new FormatInfo(data.content_format, data.accept_format);
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      normalizedData[snakeKey] = data[key];
+    }
+
+    return new FormatInfo(normalizedData.content_format, normalizedData.accept_format);
   }
 }
 
@@ -248,7 +280,14 @@ export class TemplateInfo {
    * 从字典创建TemplateInfo实例
    */
   static fromDict(data: Record<string, any>): TemplateInfo {
-    return new TemplateInfo(data.template_items, data.template_name, data.template_default !== undefined ? data.template_default : true);
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      normalizedData[snakeKey] = data[key];
+    }
+
+    return new TemplateInfo(normalizedData.template_items, normalizedData.template_name, normalizedData.template_default !== undefined ? normalizedData.template_default : true);
   }
 }
 
@@ -328,22 +367,29 @@ export class BaseMessageInfo {
    * 从字典创建BaseMessageInfo实例
    */
   static fromDict(data: Record<string, any>): BaseMessageInfo {
-    const groupInfo = data.group_info ? GroupInfo.fromDict(data.group_info) : null;
-    const userInfo = data.user_info ? UserInfo.fromDict(data.user_info) : null;
-    const formatInfo = data.format_info ? FormatInfo.fromDict(data.format_info) : undefined;
-    const templateInfo = data.template_info ? TemplateInfo.fromDict(data.template_info) : undefined;
-    const senderInfo = data.sender_info ? SenderInfo.fromDict(data.sender_info) : undefined;
-    const receiverInfo = data.receiver_info ? ReceiverInfo.fromDict(data.receiver_info) : undefined;
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      normalizedData[snakeKey] = data[key];
+    }
+
+    const groupInfo = normalizedData.group_info ? GroupInfo.fromDict(normalizedData.group_info) : null;
+    const userInfo = normalizedData.user_info ? UserInfo.fromDict(normalizedData.user_info) : null;
+    const formatInfo = normalizedData.format_info ? FormatInfo.fromDict(normalizedData.format_info) : undefined;
+    const templateInfo = normalizedData.template_info ? TemplateInfo.fromDict(normalizedData.template_info) : undefined;
+    const senderInfo = normalizedData.sender_info ? SenderInfo.fromDict(normalizedData.sender_info) : undefined;
+    const receiverInfo = normalizedData.receiver_info ? ReceiverInfo.fromDict(normalizedData.receiver_info) : undefined;
 
     return new BaseMessageInfo(
-      data.platform,
-      data.message_id,
-      data.time,
+      normalizedData.platform,
+      normalizedData.message_id,
+      normalizedData.time,
       groupInfo,
       userInfo,
       formatInfo,
       templateInfo,
-      data.additional_config,
+      normalizedData.additional_config,
       senderInfo,
       receiverInfo,
     );
@@ -384,9 +430,16 @@ export class MessageBase {
    * 从字典创建MessageBase实例
    */
   static fromDict(data: Record<string, any>): MessageBase {
-    const messageInfo = BaseMessageInfo.fromDict(data.message_info || {});
-    const messageSegment = Seg.fromDict(data.message_segment || {});
-    const rawMessage = data.raw_message;
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      const snakeKey = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      normalizedData[snakeKey] = data[key];
+    }
+
+    const messageInfo = BaseMessageInfo.fromDict(normalizedData.message_info || {});
+    const messageSegment = Seg.fromDict(normalizedData.message_segment || {});
+    const rawMessage = normalizedData.raw_message;
 
     return new MessageBase(messageInfo, messageSegment, rawMessage);
   }

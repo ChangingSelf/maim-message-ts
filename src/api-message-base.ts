@@ -15,6 +15,17 @@ function camelToSnake(key: string): string {
   return key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 }
 
+/**
+ * 字段名转换函数：将下划线命名转换为驼峰命名
+ * 用于反序列化时处理输入数据
+ */
+function snakeToCamel(key: string): string {
+  if (key === 'platform') {
+    return key;
+  }
+  return key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
 import { Seg, GroupInfo, UserInfo, InfoBase, SenderInfo, ReceiverInfo, FormatInfo, TemplateInfo } from './message-base';
 
 /**
@@ -49,14 +60,20 @@ export class MessageDim {
    * 从字典创建MessageDim实例
    */
   static fromDict(data: Record<string, any>): MessageDim {
-    const requiredFields = ['api_key', 'platform'];
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      normalizedData[snakeToCamel(key)] = data[key];
+    }
+
+    const requiredFields = ['apiKey', 'platform'];
     for (const field of requiredFields) {
-      if (!data[field]) {
+      if (!normalizedData[field]) {
         throw new Error(`MessageDim requires ${field}`);
       }
     }
 
-    return new MessageDim(data.api_key, data.platform);
+    return new MessageDim(normalizedData.apiKey, normalizedData.platform);
   }
 }
 
@@ -120,26 +137,32 @@ export class APIBaseMessageInfo {
    * 从字典创建APIBaseMessageInfo实例
    */
   static fromDict(data: Record<string, any>): APIBaseMessageInfo {
-    // 验证必需字段
-    const requiredFields = ['platform', 'message_id', 'time'];
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名，以便统一处理
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      normalizedData[snakeToCamel(key)] = data[key];
+    }
+
+    // 验证必需字段（使用驼峰命名进行验证）
+    const requiredFields = ['platform', 'messageId', 'time'];
     for (const field of requiredFields) {
-      if (data[field] === null || data[field] === undefined) {
+      if (normalizedData[snakeToCamel(field)] === null || normalizedData[snakeToCamel(field)] === undefined) {
         throw new Error(`BaseMessageInfo requires ${field}`);
       }
     }
 
-    const formatInfo = data.format_info ? FormatInfo.fromDict(data.format_info) : undefined;
-    const templateInfo = data.template_info ? TemplateInfo.fromDict(data.template_info) : undefined;
-    const senderInfo = data.sender_info ? SenderInfo.fromDict(data.sender_info) : undefined;
-    const receiverInfo = data.receiver_info ? ReceiverInfo.fromDict(data.receiver_info) : undefined;
+    const formatInfo = normalizedData.formatInfo ? FormatInfo.fromDict(normalizedData.formatInfo) : undefined;
+    const templateInfo = normalizedData.templateInfo ? TemplateInfo.fromDict(normalizedData.templateInfo) : undefined;
+    const senderInfo = normalizedData.senderInfo ? SenderInfo.fromDict(normalizedData.senderInfo) : undefined;
+    const receiverInfo = normalizedData.receiverInfo ? ReceiverInfo.fromDict(normalizedData.receiverInfo) : undefined;
 
     return new APIBaseMessageInfo(
-      data.platform,
-      data.message_id,
-      data.time,
+      normalizedData.platform,
+      normalizedData.messageId,
+      normalizedData.time,
       formatInfo,
       templateInfo,
-      data.additional_config,
+      normalizedData.additionalConfig,
       senderInfo,
       receiverInfo,
     );
@@ -175,17 +198,23 @@ export class APIMessageBase {
    * 从字典创建APIMessageBase实例
    */
   static fromDict(data: Record<string, any>): APIMessageBase {
-    // 验证必需字段
-    const requiredFields = ['message_info', 'message_segment', 'message_dim'];
+    // 兼容性处理：将驼峰命名的字段转换为下划线命名，以便统一处理
+    const normalizedData: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      normalizedData[snakeToCamel(key)] = data[key];
+    }
+
+    // 验证必需字段（使用驼峰命名进行验证）
+    const requiredFields = ['messageInfo', 'messageSegment', 'messageDim'];
     for (const field of requiredFields) {
-      if (!data[field]) {
+      if (!normalizedData[field]) {
         throw new Error(`APIMessageBase requires ${field}`);
       }
     }
 
-    const messageInfo = APIBaseMessageInfo.fromDict(data.message_info);
-    const messageSegment = Seg.fromDict(data.message_segment);
-    const messageDim = MessageDim.fromDict(data.message_dim);
+    const messageInfo = APIBaseMessageInfo.fromDict(normalizedData.messageInfo);
+    const messageSegment = Seg.fromDict(normalizedData.messageSegment);
+    const messageDim = MessageDim.fromDict(normalizedData.messageDim);
 
     return new APIMessageBase(messageInfo, messageSegment, messageDim);
   }

@@ -26,7 +26,7 @@ async function main() {
 
   // 连接到服务器
   console.log(`正在连接到服务器 (平台: ${platform})...`);
-  await client.connect('ws://localhost:18000/ws', platform);
+  await client.connect('ws://localhost:8000/ws', platform);
 
   // 运行客户端（非阻塞）
   client.run().catch(console.error);
@@ -43,8 +43,8 @@ async function main() {
         platform,
         `msg_${platform}_${count}_${Date.now()}`,
         Date.now() / 1000,
-        new GroupInfo(platform, 'group_test'),
-        new UserInfo(platform, 'user_test'),
+        new GroupInfo(platform, 'group_test', 'group_test_name'),
+        new UserInfo(platform, 'user_test', 'user_test_id', 'user_test_nickname'),
       ),
       new Seg('text', `来自 ${platform} 的测试消息 #${count}`),
     );
