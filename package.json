@@ -1,0 +1,56 @@
+{
+  "name": "@changingself/maim-message-ts",
+  "version": "0.1.0",
+  "description": "MaimBot 通用消息接口库 - TypeScript 实现",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build",
+    "test:server": "ts-node tests/test-server.ts",
+    "test:client": "ts-node tests/test-client.ts",
+    "test:router": "ts-node tests/test-router.ts",
+    "test:api-server": "ts-node tests/test-api-server.ts",
+    "test:api-client": "ts-node tests/test-api-client.ts",
+    "example": "ts-node examples/quickstart.ts"
+  },
+  "keywords": [
+    "websocket",
+    "message",
+    "maimbot",
+    "chat",
+    "bot"
+  ],
+  "author": "tcmofashi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/changingself/maim-message-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/changingself/maim-message-ts/issues"
+  },
+  "homepage": "https://github.com/changingself/maim-message-ts#readme",
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/ws": "^8.5.13",
+    "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
+}

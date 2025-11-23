@@ -1,0 +1,32 @@
+# 源代码
+src/
+tsconfig.json
+
+# 测试和示例
+test/
+tests/
+examples/
+*.test.ts
+*.test.js
+
+# 开发配置
+.vscode/
+.idea/
+.editorconfig
+.prettierrc
+.eslintrc*
+
+# Git
+.git/
+.gitignore
+
+# 文档源文件
+doc/
+docs/
+
+# 其他
+*.log
+node_modules/
+coverage/
+.nyc_output/
+

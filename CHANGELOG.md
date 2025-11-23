@@ -1,0 +1,21 @@
+# 更新日志
+
+所有重要的项目更改都将记录在此文件中。
+
+本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/) 规范。
+
+## 版本说明
+
+版本号格式：主版本号.次版本号.修订号
+
+- **主版本号**: 当做了不兼容的 API 修改
+- **次版本号**: 当做了向下兼容的功能性新增
+- **修订号**: 当做了向下兼容的问题修正
+
+## [0.1.0] - 2025-11-23
+
+本版本基于 [maim-message v0.5.7]: https://github.com/Mai-with-u/maim_message/commit/d04adfc5a36ee092ba7bbe38f10fe6995c630b13
+
+- 初始化项目，将原python项目转写为typescript
+
+---
