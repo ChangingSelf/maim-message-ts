@@ -4,6 +4,17 @@
  * MIT License
  */
 
+/**
+ * 字段名转换函数：将驼峰命名转换为下划线命名
+ * 注意：platform字段保持不变，因为在Python版本中就是platform
+ */
+function camelToSnake(key: string): string {
+  if (key === 'platform') {
+    return key;
+  }
+  return key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+}
+
 import { Seg, GroupInfo, UserInfo, InfoBase, SenderInfo, ReceiverInfo, FormatInfo, TemplateInfo } from './message-base';
 
 /**
@@ -22,10 +33,16 @@ export class MessageDim {
    * 转换为字典格式
    */
   toDict(): Record<string, any> {
-    return {
-      api_key: this.apiKey,
-      platform: this.platform,
-    };
+    const result: Record<string, any> = {};
+
+    // 使用通用转换函数确保所有字段都正确转换为下划线命名
+    Object.keys(this).forEach(key => {
+      if (this[key as keyof this] !== undefined) {
+        result[camelToSnake(key)] = this[key as keyof this];
+      }
+    });
+
+    return result;
   }
 
   /**
@@ -80,27 +97,21 @@ export class APIBaseMessageInfo {
    * 转换为字典格式
    */
   toDict(): Record<string, any> {
-    const result: Record<string, any> = {
-      platform: this.platform,
-      message_id: this.messageId,
-      time: this.time,
-    };
+    const result: Record<string, any> = {};
 
-    if (this.formatInfo !== undefined) {
-      result.format_info = this.formatInfo.toDict();
-    }
-    if (this.templateInfo !== undefined) {
-      result.template_info = this.templateInfo.toDict();
-    }
-    if (this.additionalConfig !== undefined) {
-      result.additional_config = this.additionalConfig;
-    }
-    if (this.senderInfo !== undefined) {
-      result.sender_info = this.senderInfo.toDict();
-    }
-    if (this.receiverInfo !== undefined) {
-      result.receiver_info = this.receiverInfo.toDict();
-    }
+    // 使用通用转换函数确保所有字段都正确转换为下划线命名
+    Object.keys(this).forEach(key => {
+      const value = this[key as keyof this];
+      if (value !== undefined) {
+        if (typeof value === 'object' && value !== null && 'toDict' in value && typeof value.toDict === 'function') {
+          // 对于有toDict方法的对象，递归调用
+          result[camelToSnake(key)] = (value as any).toDict();
+        } else {
+          // 对于基本类型，直接赋值
+          result[camelToSnake(key)] = value;
+        }
+      }
+    });
 
     return result;
   }
