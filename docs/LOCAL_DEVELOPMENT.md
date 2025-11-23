@@ -95,6 +95,7 @@ pnpm build
 ```
 
 路径可以是相对路径或绝对路径：
+
 - 相对路径：`file:../maim-message-ts`
 - 绝对路径：`file:/absolute/path/to/maim-message-ts`
 
@@ -204,7 +205,8 @@ npm install /path/to/maim-message-ts/changingself-maim-message-ts-0.1.0.tgz
 
 #### Q: 修改代码后测试项目没有更新？
 
-A: 
+A:
+
 - 确保运行了 `pnpm build`
 - 如果使用 npm link，检查链接是否正确：`npm ls -g --link`
 - 尝试重启 TypeScript 服务器（VS Code 中按 Ctrl+Shift+P，选择 "TypeScript: Restart TS Server"）
@@ -212,6 +214,7 @@ A:
 #### Q: TypeScript 类型提示不工作？
 
 A:
+
 - 确保编译后生成了 `.d.ts` 文件
 - 检查 `tsconfig.json` 中的 `declaration: true`
 - 重启 IDE 或 TypeScript 服务器
@@ -219,6 +222,7 @@ A:
 #### Q: npm link 后找不到模块？
 
 A:
+
 - 检查 `package.json` 中的 `name` 字段
 - 使用正确的包名：`@changingself/maim-message-ts`
 - 确保在两个项目中都执行了正确的命令
@@ -241,12 +245,12 @@ import { MessageServer, MessageClient } from '@changingself/maim-message-ts';
 
 async function test() {
   console.log('测试 maim-message-ts');
-  
+
   const server = new MessageServer('localhost', 18000);
-  server.registerMessageHandler(async (data) => {
+  server.registerMessageHandler(async data => {
     console.log('收到消息:', data);
   });
-  
+
   await server.run();
 }
 
@@ -269,12 +273,11 @@ npx ts-node test.ts
 
 ## 总结
 
-| 方法 | 优点 | 缺点 | 适用场景 |
-|------|------|------|----------|
-| npm link | 方便，实时更新 | 需要全局链接 | 日常开发 |
-| 本地路径 | 简单直接 | 需要手动更新 | 简单测试 |
-| workspace | 统一管理 | 需要特定结构 | 多包项目 |
-| tarball | 接近真实发布 | 每次更新繁琐 | 发布前测试 |
+| 方法      | 优点           | 缺点         | 适用场景   |
+| --------- | -------------- | ------------ | ---------- |
+| npm link  | 方便，实时更新 | 需要全局链接 | 日常开发   |
+| 本地路径  | 简单直接       | 需要手动更新 | 简单测试   |
+| workspace | 统一管理       | 需要特定结构 | 多包项目   |
+| tarball   | 接近真实发布   | 每次更新繁琐 | 发布前测试 |
 
 **推荐使用 npm link 进行日常开发和测试。**
-

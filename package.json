@@ -1,11 +1,12 @@
 {
   "name": "@changingself/maim-message-ts",
   "version": "0.1.0",
-  "description": "MaimBot 通用消息接口库 - TypeScript 实现",
+  "description": "MaiBot 通用消息接口库 - TypeScript 实现",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "package.json",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -13,7 +14,10 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
+    "clean:all": "rimraf dist && rimraf node_modules",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "prepublishOnly": "pnpm clean && pnpm build",
     "test:server": "ts-node tests/test-server.ts",
     "test:client": "ts-node tests/test-client.ts",
@@ -26,6 +30,7 @@
     "websocket",
     "message",
     "maimbot",
+    "maibot",
     "chat",
     "bot"
   ],
